@@ -1,6 +1,13 @@
 use juniper::FieldResult;
 use juniper::RootNode;
 
+#[derive(GraphQLEnum)]
+enum Episode {
+    NewHope,
+    Empire,
+    Jedi,
+}
+
 #[derive(GraphQLObject)]
 #[graphql(description = "A humanoid creature in the Star Wars universe")]
 struct Human {
