@@ -1,50 +1,50 @@
 use juniper::FieldResult;
 use juniper::RootNode;
+use juniper::EmptyMutation;
+use crate::Context;
+use diesel::prelude::*;
 
-#[derive(GraphQLEnum)]
-enum Episode {
-    NewHope,
-    Empire,
-    Jedi,
-}
+use crate::dao::models;
+
+pub struct Query;
 
 #[derive(GraphQLObject)]
-#[graphql(description = "A humanoid creature in the Star Wars universe")]
-struct Human {
-    id: String,
-    name: String,
+#[graphql(description = "An item")]
+struct InvType {
+    pub id: i32,
+    pub name: Option<String>,
 }
 
-#[derive(GraphQLInputObject)]
-#[graphql(description = "A humanoid creature in the Star Wars universe")]
-struct NewHuman {
-    name: String,
+impl From<models::InvType> for InvType {
+    fn from(model: models::InvType) -> Self {
+        InvType {
+            id: model.id,
+            name: model.name,
+        }
+    }
 }
 
-pub struct QueryRoot;
+#[juniper::object(
+    Context = Context,
+)]
+impl Query {
+    fn invTypes(context: &Context) -> FieldResult<Vec<InvType>> {
+        use crate::dao::schema::invTypes::dsl;
 
-graphql_object!(QueryRoot: () |&self| {
-    field human(&executor, id: String) -> FieldResult<Human> {
-        Ok(Human{
-            id: "1234".to_owned(),
-            name: "Luke".to_owned(),
-        })
+        let connection = executor.context().pool.clone().get().unwrap();
+
+        let results = dsl::invTypes.order(dsl::typeName)
+            .load::<models::InvType>(&*connection)?
+            .into_iter()
+            .map(|item| InvType::from(item))
+            .collect();
+
+        Ok(results)
     }
-});
+}
 
-pub struct MutationRoot;
-
-graphql_object!(MutationRoot: () |&self| {
-    field createHuman(&executor, new_human: NewHuman) -> FieldResult<Human> {
-        Ok(Human{
-            id: "1234".to_owned(),
-            name: new_human.name,
-        })
-    }
-});
-
-pub type Schema = RootNode<'static, QueryRoot, MutationRoot>;
+pub type Schema = RootNode<'static, Query, EmptyMutation<Context>>;
 
 pub fn create_schema() -> Schema {
-    Schema::new(QueryRoot {}, MutationRoot {})
+    Schema::new(Query {}, EmptyMutation::<Context>::new())
 }

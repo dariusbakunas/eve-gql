@@ -1,3 +1,5 @@
+#![allow(non_snake_case)]
+
 table! {
     agtAgents (agentID) {
         agentID -> Integer,
@@ -465,18 +467,18 @@ table! {
         typeID -> Integer,
         groupID -> Nullable<Integer>,
         typeName -> Nullable<Varchar>,
-        description -> Nullable<Text>,
-        mass -> Nullable<Double>,
-        volume -> Nullable<Double>,
-        capacity -> Nullable<Double>,
-        portionSize -> Nullable<Integer>,
-        raceID -> Nullable<Integer>,
-        basePrice -> Nullable<Decimal>,
-        published -> Nullable<Bool>,
-        marketGroupID -> Nullable<Integer>,
-        iconID -> Nullable<Integer>,
-        soundID -> Nullable<Integer>,
-        graphicID -> Nullable<Integer>,
+//        description -> Nullable<Text>,
+//        mass -> Nullable<Double>,
+//        volume -> Nullable<Double>,
+//        capacity -> Nullable<Double>,
+//        portionSize -> Nullable<Integer>,
+//        raceID -> Nullable<Integer>,
+//        basePrice -> Nullable<Decimal>,
+//        published -> Nullable<Bool>,
+//        marketGroupID -> Nullable<Integer>,
+//        iconID -> Nullable<Integer>,
+//        soundID -> Nullable<Integer>,
+//        graphicID -> Nullable<Integer>,
     }
 }
 

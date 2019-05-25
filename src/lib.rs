@@ -1,23 +1,36 @@
+#![recursion_limit="128"]
+
 #[macro_use]
 extern crate juniper;
+
+#[macro_use]
+extern crate diesel;
 
 use std::io;
 use actix_web::{middleware, App, HttpServer, web};
 use r2d2;
 use r2d2_diesel::ConnectionManager;
 use diesel::mysql::MysqlConnection;
+use juniper::{Context as JuniperContext};
 use std::sync::Arc;
 
 mod gql;
+mod dao;
 
 use gql::routes::graphiql;
 use gql::routes::graphql;
 use gql::schema::create_schema;
 use crate::gql::schema::Schema;
 
+pub struct Context {
+    pub pool: r2d2::Pool<r2d2_diesel::ConnectionManager<MysqlConnection>>,
+}
+
+impl JuniperContext for Context {}
+
 pub struct AppState {
     schema: Arc<Schema>,
-    pool: r2d2::Pool<r2d2_diesel::ConnectionManager<MysqlConnection>>,
+    context: Context
 }
 
 pub fn run(database_url: &str) -> io::Result<()> {
@@ -35,7 +48,9 @@ pub fn run(database_url: &str) -> io::Result<()> {
         App::new()
             .data(AppState {
                 schema: schema.clone(),
-                pool: pool.clone(),
+                context: Context {
+                    pool: pool.clone(),
+                },
             })
             .wrap(middleware::Logger::default())
             .service(web::resource("/graphql").route(web::post().to_async(graphql)))
