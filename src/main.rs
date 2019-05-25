@@ -1,12 +1,14 @@
-//! Actix web juniper example
-//!
-//! A simple example integrating juniper in actix-web
 use std::io;
 use eve_gql::run;
+use std::env;
+use dotenv;
 
 fn main() -> io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
 
-    run()
+    dotenv::dotenv().expect("No .env file found");
+    let database_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set in .env");
+    run(&database_url)
 }
