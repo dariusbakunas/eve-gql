@@ -615,17 +615,17 @@ table! {
     mapRegions (regionID) {
         regionID -> Integer,
         regionName -> Nullable<Varchar>,
-        x -> Nullable<Double>,
-        y -> Nullable<Double>,
-        z -> Nullable<Double>,
-        xMin -> Nullable<Double>,
-        xMax -> Nullable<Double>,
-        yMin -> Nullable<Double>,
-        yMax -> Nullable<Double>,
-        zMin -> Nullable<Double>,
-        zMax -> Nullable<Double>,
-        factionID -> Nullable<Integer>,
-        radius -> Nullable<Float>,
+//        x -> Nullable<Double>,
+//        y -> Nullable<Double>,
+//        z -> Nullable<Double>,
+//        xMin -> Nullable<Double>,
+//        xMax -> Nullable<Double>,
+//        yMin -> Nullable<Double>,
+//        yMax -> Nullable<Double>,
+//        zMin -> Nullable<Double>,
+//        zMax -> Nullable<Double>,
+//        factionID -> Nullable<Integer>,
+//        radius -> Nullable<Float>,
     }
 }
 

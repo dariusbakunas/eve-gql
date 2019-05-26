@@ -24,6 +24,12 @@ pub struct InvMarketGroup {
     pub name: Option<String>,
 }
 
+#[derive(GraphQLObject)]
+pub struct MapRegion {
+    pub id: i32,
+    pub name: Option<String>,
+}
+
 pub type Schema = RootNode<'static, Query, EmptyMutation<Context>>;
 
 pub fn create_schema() -> Schema {

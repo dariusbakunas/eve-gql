@@ -18,3 +18,9 @@ pub struct InvMarketGroup {
     pub parent_group_id: Option<i32>,
     pub name: Option<String>,
 }
+
+#[derive(Queryable)]
+pub struct MapRegion {
+    pub id: i32,
+    pub name: Option<String>,
+}

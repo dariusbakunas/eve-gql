@@ -6,6 +6,7 @@ use super::schema::Query;
 use super::schema::InvType;
 use super::schema::InvGroup;
 use super::schema::InvMarketGroup;
+use super::schema::MapRegion;
 
 impl From<models::InvType> for InvType {
     fn from(model: models::InvType) -> Self {
@@ -28,6 +29,15 @@ impl From<models::InvGroup> for InvGroup {
 impl From<models::InvMarketGroup> for InvMarketGroup {
     fn from(model: models::InvMarketGroup) -> Self {
         InvMarketGroup {
+            id: model.id,
+            name: model.name,
+        }
+    }
+}
+
+impl From<models::MapRegion> for MapRegion {
+    fn from(model: models::MapRegion) -> Self {
+        MapRegion {
             id: model.id,
             name: model.name,
         }
@@ -66,6 +76,20 @@ impl Query {
         Ok(results)
     }
 
+    fn mapRegions(context: &Context) -> FieldResult<Vec<MapRegion>> {
+        use crate::dao::schema::mapRegions::dsl;
+
+        let connection = executor.context().pool.clone().get().unwrap();
+
+        let results = dsl::mapRegions.order(dsl::regionName)
+            .load::<models::MapRegion>(&*connection)?
+            .into_iter()
+            .map(|item| MapRegion::from(item))
+            .collect();
+
+        Ok(results)
+    }
+
     fn invMarketGroups(context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
         use crate::dao::schema::invMarketGroups::dsl;
 
@@ -94,7 +118,7 @@ impl InvMarketGroup {
         self.name.clone()
     }
 
-    fn groups(&self, context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
+    fn invMarketGroups(&self, context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
         use crate::dao::schema::invMarketGroups::dsl;
 
         let connection = executor.context().pool.clone().get().unwrap();
