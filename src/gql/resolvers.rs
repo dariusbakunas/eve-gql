@@ -81,3 +81,31 @@ impl Query {
         Ok(results)
     }
 }
+
+#[juniper::object(
+Context = Context,
+)]
+impl InvMarketGroup {
+    fn id(&self) -> i32 {
+        self.id
+    }
+
+    fn name(&self) -> Option<String> {
+        self.name.clone()
+    }
+
+    fn groups(&self, context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
+        use crate::dao::schema::invMarketGroups::dsl;
+
+        let connection = executor.context().pool.clone().get().unwrap();
+
+        let results = dsl::invMarketGroups.order(dsl::marketGroupName)
+            .filter(dsl::parentGroupID.eq(&self.id))
+            .load::<models::InvMarketGroup>(&*connection)?
+            .into_iter()
+            .map(|item| InvMarketGroup::from(item))
+            .collect();
+
+        Ok(results)
+    }
+}

@@ -18,7 +18,6 @@ pub struct InvGroup {
     pub name: Option<String>,
 }
 
-#[derive(GraphQLObject)]
 // Market group
 pub struct InvMarketGroup {
     pub id: i32,
