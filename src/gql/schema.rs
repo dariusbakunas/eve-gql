@@ -18,14 +18,18 @@ pub struct InvGroup {
     pub name: Option<String>,
 }
 
-// Market group
 pub struct InvMarketGroup {
     pub id: i32,
     pub name: Option<String>,
 }
 
-#[derive(GraphQLObject)]
 pub struct MapRegion {
+    pub id: i32,
+    pub name: Option<String>,
+}
+
+#[derive(GraphQLObject)]
+pub struct MapSolarSystem {
     pub id: i32,
     pub name: Option<String>,
 }

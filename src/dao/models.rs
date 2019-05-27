@@ -24,3 +24,11 @@ pub struct MapRegion {
     pub id: i32,
     pub name: Option<String>,
 }
+
+#[derive(Queryable)]
+pub struct MapSolarSystem {
+    pub region_id: Option<i32>,
+    pub constellation_id: Option<i32>,
+    pub id: i32,
+    pub name: Option<String>,
+}

@@ -7,6 +7,7 @@ use super::schema::InvType;
 use super::schema::InvGroup;
 use super::schema::InvMarketGroup;
 use super::schema::MapRegion;
+use super::schema::MapSolarSystem;
 
 impl From<models::InvType> for InvType {
     fn from(model: models::InvType) -> Self {
@@ -38,6 +39,15 @@ impl From<models::InvMarketGroup> for InvMarketGroup {
 impl From<models::MapRegion> for MapRegion {
     fn from(model: models::MapRegion) -> Self {
         MapRegion {
+            id: model.id,
+            name: model.name,
+        }
+    }
+}
+
+impl From<models::MapSolarSystem> for MapSolarSystem {
+    fn from(model: models::MapSolarSystem) -> Self {
+        MapSolarSystem {
             id: model.id,
             name: model.name,
         }
@@ -90,6 +100,20 @@ impl Query {
         Ok(results)
     }
 
+    fn mapSolarSystems(context: &Context) -> FieldResult<Vec<MapSolarSystem>> {
+        use crate::dao::schema::mapSolarSystems::dsl;
+
+        let connection = executor.context().pool.clone().get().unwrap();
+
+        let results = dsl::mapSolarSystems.order(dsl::solarSystemName)
+            .load::<models::MapSolarSystem>(&*connection)?
+            .into_iter()
+            .map(|item| MapSolarSystem::from(item))
+            .collect();
+
+        Ok(results)
+    }
+
     fn invMarketGroups(context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
         use crate::dao::schema::invMarketGroups::dsl;
 
@@ -114,8 +138,8 @@ impl InvMarketGroup {
         self.id
     }
 
-    fn name(&self) -> Option<String> {
-        self.name.clone()
+    fn name(&self) -> &Option<String> {
+        &self.name
     }
 
     fn invMarketGroups(&self, context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
@@ -128,6 +152,34 @@ impl InvMarketGroup {
             .load::<models::InvMarketGroup>(&*connection)?
             .into_iter()
             .map(|item| InvMarketGroup::from(item))
+            .collect();
+
+        Ok(results)
+    }
+}
+
+#[juniper::object(
+Context = Context,
+)]
+impl MapRegion {
+    fn id(&self) -> i32 {
+        self.id
+    }
+
+    fn name(&self) -> &Option<String> {
+        &self.name
+    }
+
+    fn mapSolarSystems(&self, context: &Context) -> FieldResult<Vec<MapSolarSystem>> {
+        use crate::dao::schema::mapSolarSystems::dsl;
+
+        let connection = executor.context().pool.clone().get().unwrap();
+
+        let results = dsl::mapSolarSystems.order(dsl::solarSystemName)
+            .filter(dsl::regionID.eq(&self.id))
+            .load::<models::MapSolarSystem>(&*connection)?
+            .into_iter()
+            .map(|item| MapSolarSystem::from(item))
             .collect();
 
         Ok(results)
