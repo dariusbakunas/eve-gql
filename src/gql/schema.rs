@@ -38,6 +38,7 @@ pub struct Character {
     pub id: i32,
     pub name: String,
     pub ancestry_id: i32,
+    pub bloodline_id: i32,
 }
 
 pub struct SkillQueueItem {

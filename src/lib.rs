@@ -16,6 +16,7 @@ use std::sync::Arc;
 
 mod gql;
 mod dao;
+mod esi;
 
 use gql::routes::graphiql;
 use gql::routes::graphql;

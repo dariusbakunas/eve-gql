@@ -38,3 +38,9 @@ pub struct ChrAncestry {
     pub id: i32,
     pub name: Option<String>,
 }
+
+#[derive(Queryable)]
+pub struct ChrBloodline {
+    pub id: i32,
+    pub name: Option<String>,
+}

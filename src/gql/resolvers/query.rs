@@ -4,14 +4,15 @@ use diesel::prelude::*;
 use reqwest;
 use serde::{Serialize, Deserialize};
 use crate::dao::models;
-use super::schema::Query;
-use super::schema::Character;
-use super::schema::InvType;
-use super::schema::InvGroup;
-use super::schema::InvMarketGroup;
-use super::schema::MapRegion;
-use super::schema::MapSolarSystem;
-use super::schema::SkillQueueItem;
+use crate::esi;
+use super::super::schema::Query;
+use super::super::schema::Character;
+use super::super::schema::InvType;
+use super::super::schema::InvGroup;
+use super::super::schema::InvMarketGroup;
+use super::super::schema::MapRegion;
+use super::super::schema::MapSolarSystem;
+use super::super::schema::SkillQueueItem;
 use reqwest::StatusCode;
 
 impl From<models::InvType> for InvType {
@@ -59,33 +60,22 @@ impl From<models::MapSolarSystem> for MapSolarSystem {
     }
 }
 
-#[derive(Deserialize, Debug)]
-struct CharacterResponse {
-    alliance_id: i32,
-    ancestry_id: i32,
-    bloodline_id: u32,
-    corporation_id: u32,
-    gender: String,
-    race_id: u32,
-    name: String,
-    security_status: f32,
-}
-
 #[juniper::object(
 Context = Context,
 )]
 impl Query {
-    fn character(context: &Context, id: i32, token: Option<String>) -> FieldResult<Option<Character>> {
+    fn character(context: &Context, id: i32) -> FieldResult<Option<Character>> {
         let url = format!("https://esi.evetech.net/latest/characters/{}/?datasource=tranquility", id);
         let mut resp = reqwest::get(&url)?;
 
         if resp.status().is_success() {
-            let character: CharacterResponse = resp.json()?;
+            let character: esi::models::CharacterResponse = resp.json()?;
 
             Ok(Some(Character {
                 id,
                 name: character.name,
                 ancestry_id: character.ancestry_id,
+                bloodline_id: character.bloodline_id,
             }))
         } else if resp.status().eq(&StatusCode::NOT_FOUND) {
             Ok(None)
@@ -173,32 +163,20 @@ impl Query {
 #[juniper::object(
 Context = Context,
 )]
-impl Character {
+impl models::ChrAncestry {
     fn id(&self) -> i32 {
         self.id
     }
 
-    fn name(&self) -> &String {
+    fn name(&self) -> &Option<String> {
         &self.name
-    }
-
-    fn ancestry(&self, context: &Context) -> FieldResult<models::ChrAncestry> {
-        use crate::dao::schema::chrAncestries::dsl;
-
-        let connection = executor.context().pool.clone().get().unwrap();
-
-        let result = dsl::chrAncestries
-            .find(self.ancestry_id)
-            .get_result::<models::ChrAncestry>(&*connection)?;
-
-        Ok(result)
     }
 }
 
 #[juniper::object(
 Context = Context,
 )]
-impl models::ChrAncestry {
+impl models::ChrBloodline {
     fn id(&self) -> i32 {
         self.id
     }
