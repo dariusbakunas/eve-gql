@@ -32,3 +32,9 @@ pub struct MapSolarSystem {
     pub id: i32,
     pub name: Option<String>,
 }
+
+#[derive(Queryable)]
+pub struct ChrAncestry {
+    pub id: i32,
+    pub name: Option<String>,
+}

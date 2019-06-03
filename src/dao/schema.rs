@@ -40,15 +40,15 @@ table! {
     chrAncestries (ancestryID) {
         ancestryID -> Integer,
         ancestryName -> Nullable<Varchar>,
-        bloodlineID -> Nullable<Integer>,
-        description -> Nullable<Varchar>,
-        perception -> Nullable<Integer>,
-        willpower -> Nullable<Integer>,
-        charisma -> Nullable<Integer>,
-        memory -> Nullable<Integer>,
-        intelligence -> Nullable<Integer>,
-        iconID -> Nullable<Integer>,
-        shortDescription -> Nullable<Varchar>,
+//        bloodlineID -> Nullable<Integer>,
+//        description -> Nullable<Varchar>,
+//        perception -> Nullable<Integer>,
+//        willpower -> Nullable<Integer>,
+//        charisma -> Nullable<Integer>,
+//        memory -> Nullable<Integer>,
+//        intelligence -> Nullable<Integer>,
+//        iconID -> Nullable<Integer>,
+//        shortDescription -> Nullable<Varchar>,
     }
 }
 

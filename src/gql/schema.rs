@@ -34,6 +34,18 @@ pub struct MapSolarSystem {
     pub name: Option<String>,
 }
 
+pub struct Character {
+    pub id: i32,
+    pub name: String,
+    pub ancestry_id: i32,
+}
+
+pub struct SkillQueueItem {
+    pub id: i32,
+    pub name: Option<String>,
+    pub index: u32,
+}
+
 pub type Schema = RootNode<'static, Query, EmptyMutation<Context>>;
 
 pub fn create_schema() -> Schema {
