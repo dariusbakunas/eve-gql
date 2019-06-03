@@ -106,8 +106,8 @@ table! {
         raceID -> Integer,
         raceName -> Nullable<Varchar>,
         description -> Nullable<Varchar>,
-        iconID -> Nullable<Integer>,
-        shortDescription -> Nullable<Varchar>,
+//        iconID -> Nullable<Integer>,
+//        shortDescription -> Nullable<Varchar>,
     }
 }
 

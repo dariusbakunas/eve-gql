@@ -44,3 +44,10 @@ pub struct ChrBloodline {
     pub id: i32,
     pub name: Option<String>,
 }
+
+#[derive(Queryable, GraphQLObject)]
+pub struct ChrRace {
+    pub id: i32,
+    pub name: Option<String>,
+    pub description: Option<String>,
+}

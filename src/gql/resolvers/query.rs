@@ -2,7 +2,6 @@ use crate::Context;
 use juniper::{FieldResult, FieldError, Value};
 use diesel::prelude::*;
 use reqwest;
-use serde::{Serialize, Deserialize};
 use crate::dao::models;
 use crate::esi;
 use super::super::schema::Query;
@@ -12,7 +11,6 @@ use super::super::schema::InvGroup;
 use super::super::schema::InvMarketGroup;
 use super::super::schema::MapRegion;
 use super::super::schema::MapSolarSystem;
-use super::super::schema::SkillQueueItem;
 use reqwest::StatusCode;
 
 impl From<models::InvType> for InvType {
@@ -76,6 +74,7 @@ impl Query {
                 name: character.name,
                 ancestry_id: character.ancestry_id,
                 bloodline_id: character.bloodline_id,
+                race_id: character.race_id,
             }))
         } else if resp.status().eq(&StatusCode::NOT_FOUND) {
             Ok(None)

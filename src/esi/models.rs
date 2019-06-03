@@ -7,7 +7,7 @@ pub struct CharacterResponse {
     pub bloodline_id: i32,
     pub corporation_id: u32,
     pub gender: String,
-    pub race_id: u32,
+    pub race_id: i32,
     pub name: String,
     pub security_status: f32,
 }
