@@ -6,6 +6,9 @@ extern crate juniper;
 #[macro_use]
 extern crate diesel;
 
+#[macro_use]
+extern crate error_chain;
+
 use std::io;
 use actix_web::{middleware, App, HttpServer, web};
 use r2d2;
@@ -17,6 +20,7 @@ use std::sync::Arc;
 mod gql;
 mod dao;
 mod esi;
+mod errors;
 
 use gql::routes::graphiql;
 use gql::routes::graphql;
