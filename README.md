@@ -37,3 +37,25 @@ Once server starts, access GraphiQl at `http://127.0.0.1:8080/graphiql`
   }
 }
 ```
+
+* basic character info:
+
+```
+{
+  character(id: XXXXXXXX) {
+    id
+    name
+    ancestry {
+      name
+    }
+    bloodline {
+      name
+    }
+    race {
+      name
+      description
+    }
+  }
+}
+
+```
