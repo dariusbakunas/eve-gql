@@ -12,6 +12,7 @@ use super::super::schema::InvMarketGroup;
 use super::super::schema::MapRegion;
 use super::super::schema::MapSolarSystem;
 use reqwest::StatusCode;
+use crate::esi::api;
 
 impl From<models::InvType> for InvType {
     fn from(model: models::InvType) -> Self {
@@ -63,28 +64,17 @@ Context = Context,
 )]
 impl Query {
     fn character(context: &Context, id: i32) -> FieldResult<Option<Character>> {
-        let url = format!("https://esi.evetech.net/latest/characters/{}/?datasource=tranquility", id);
-        let mut resp = reqwest::get(&url)?;
-
-        if resp.status().is_success() {
-            let character: esi::models::CharacterResponse = resp.json()?;
-
-            Ok(Some(Character {
+        let character = api::get_character(id)?.and_then(|character| {
+            Some(Character {
                 id,
                 name: character.name,
                 ancestry_id: character.ancestry_id,
                 bloodline_id: character.bloodline_id,
                 race_id: character.race_id,
-            }))
-        } else if resp.status().eq(&StatusCode::NOT_FOUND) {
-            Ok(None)
-        } else {
-            println!("Character request failed. Status: {:?}", resp.status());
-            Err(FieldError::new(
-                format!("Failed getting character info. Status: {:?}", resp.status()),
-                Value::null()
-            ))
-        }
+            })
+        });
+
+        Ok(character)
     }
 
     fn invTypes(context: &Context) -> FieldResult<Vec<InvType>> {
