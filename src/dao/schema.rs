@@ -367,12 +367,12 @@ table! {
         groupID -> Integer,
         categoryID -> Nullable<Integer>,
         groupName -> Nullable<Varchar>,
-//        iconID -> Nullable<Integer>,
-//        useBasePrice -> Nullable<Bool>,
-//        anchored -> Nullable<Bool>,
-//        anchorable -> Nullable<Bool>,
-//        fittableNonSingleton -> Nullable<Bool>,
-//        published -> Nullable<Bool>,
+        iconID -> Nullable<Integer>,
+        useBasePrice -> Nullable<Bool>,
+        anchored -> Nullable<Bool>,
+        anchorable -> Nullable<Bool>,
+        fittableNonSingleton -> Nullable<Bool>,
+        published -> Nullable<Bool>,
     }
 }
 

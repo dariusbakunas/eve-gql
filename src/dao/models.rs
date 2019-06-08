@@ -10,6 +10,12 @@ pub struct InvGroup {
     pub id: i32,
     pub category_id: Option<i32>,
     pub name: Option<String>,
+    pub icon_id: Option<i32>,
+    pub use_base_price: Option<bool>,
+    pub anchored: Option<bool>,
+    pub anchorable: Option<bool>,
+    pub fittable_non_singleton: Option<bool>,
+    pub published: Option<bool>,
 }
 
 #[derive(Queryable)]

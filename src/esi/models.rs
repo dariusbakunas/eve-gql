@@ -1,6 +1,5 @@
 use serde::{Deserialize};
 use chrono::{DateTime, Utc};
-use chrono::prelude::*;
 
 #[derive(Deserialize, Debug)]
 pub struct CharacterResponse {

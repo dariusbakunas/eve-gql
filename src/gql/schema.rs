@@ -57,6 +57,12 @@ pub struct SkillQueueItem {
     pub training_start_sp: i32,
 }
 
+#[derive(GraphQLObject)]
+pub struct SkillGroup {
+    pub id: i32,
+    pub name: Option<String>,
+}
+
 pub type Schema = RootNode<'static, Query, EmptyMutation<Context>>;
 
 pub fn create_schema() -> Schema {
