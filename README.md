@@ -38,7 +38,7 @@ Once server starts, access GraphiQl at `http://127.0.0.1:8080/graphiql`
 }
 ```
 
-* basic character info:
+* character info:
 
 ```
 {
@@ -69,4 +69,20 @@ Once server starts, access GraphiQl at `http://127.0.0.1:8080/graphiql`
   }
 }
 
+```
+
+* get skill groups:
+
+```
+{
+  skillGroups {
+    id
+    name
+    skills {
+      id
+      name    
+      description  
+    }
+  }
+}
 ```
