@@ -5,7 +5,7 @@ authors = ["Darius Bakunas-Milanowski <bakunas@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-actix-web = "1.0.0-rc"
+actix-web = "1.0.0"
 base64 = "0.10.1"
 dotenv = "0.14.1"
 juniper = "0.12.0"
