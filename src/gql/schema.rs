@@ -42,10 +42,11 @@ pub struct Character {
     pub race_id: i32,
 }
 
+#[derive(GraphQLObject)]
 pub struct SkillQueueItem {
     pub id: i32,
     pub name: Option<String>,
-    pub index: u32,
+    pub index: i32,
 }
 
 pub type Schema = RootNode<'static, Query, EmptyMutation<Context>>;

@@ -1,8 +1,10 @@
 use crate::Context;
 use crate::dao::models;
+use crate::esi::api;
 use diesel::prelude::*;
 use super::super::schema::Character;
 use juniper::{FieldResult};
+use crate::gql::schema::SkillQueueItem;
 
 #[juniper::object(
     Context = Context,
@@ -50,5 +52,16 @@ impl Character {
             .get_result::<models::ChrRace>(&*connection)?;
 
         Ok(result)
+    }
+
+    fn skill_queue(&self, token: String, context: &Context) -> FieldResult<Option<Vec<SkillQueueItem>>> {
+        let skill_queue: Option<Vec<SkillQueueItem>> = api::get_skill_queue(self.id, &token[..])?
+            .and_then(|queue| {
+                Some(queue.into_iter()
+                    .map(|item| SkillQueueItem::from(item))
+                    .collect())
+            });
+
+        Ok(skill_queue)
     }
 }

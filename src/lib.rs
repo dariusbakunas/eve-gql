@@ -9,6 +9,9 @@ extern crate diesel;
 #[macro_use]
 extern crate error_chain;
 
+#[macro_use]
+extern crate log;
+
 use std::io;
 use actix_web::{middleware, App, HttpServer, web};
 use r2d2;

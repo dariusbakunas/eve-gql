@@ -4,7 +4,7 @@ use std::env;
 use dotenv;
 
 fn main() -> io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_web=info");
+    std::env::set_var("RUST_LOG", "info, actix_web=info");
     env_logger::init();
 
     dotenv::dotenv().expect("No .env file found");

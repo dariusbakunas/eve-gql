@@ -11,8 +11,10 @@ use super::super::schema::InvGroup;
 use super::super::schema::InvMarketGroup;
 use super::super::schema::MapRegion;
 use super::super::schema::MapSolarSystem;
+use super::super::schema::SkillQueueItem;
 use reqwest::StatusCode;
 use crate::esi::api;
+use crate::esi::models::SkillQueueResponse;
 
 impl From<models::InvType> for InvType {
     fn from(model: models::InvType) -> Self {
@@ -55,6 +57,16 @@ impl From<models::MapSolarSystem> for MapSolarSystem {
         MapSolarSystem {
             id: model.id,
             name: model.name,
+        }
+    }
+}
+
+impl From<esi::models::SkillQueueResponse> for SkillQueueItem {
+    fn from(model: SkillQueueResponse) -> Self {
+        SkillQueueItem {
+            id: model.skill_id,
+            name: None, // will resolve later
+            index: 0
         }
     }
 }

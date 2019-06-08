@@ -11,3 +11,13 @@ pub struct CharacterResponse {
     pub name: String,
     pub security_status: f32,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct SkillQueueResponse {
+    pub queue_position: i32,
+    pub skill_id: i32,
+    pub level_end_sp: i32,
+    pub level_start_sp: i32,
+    pub finished_level: i32,
+    pub training_start_sp: i32,
+}
