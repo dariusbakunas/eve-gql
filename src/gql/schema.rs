@@ -58,6 +58,12 @@ pub struct SkillQueueItem {
 }
 
 #[derive(GraphQLObject)]
+pub struct Skill {
+    pub id: i32,
+    pub name: Option<String>,
+    pub description: Option<String>,
+}
+
 pub struct SkillGroup {
     pub id: i32,
     pub name: Option<String>,

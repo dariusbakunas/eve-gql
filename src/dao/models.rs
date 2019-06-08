@@ -1,8 +1,18 @@
+use bigdecimal::BigDecimal;
+
 #[derive(Queryable)]
 pub struct InvType {
     pub id: i32,
     pub group_id: Option<i32>,
     pub name: Option<String>,
+    pub description: Option<String>,
+    pub mass: Option<f64>,
+    pub volume: Option<f64>,
+    pub capacity: Option<f64>,
+    pub portion_size: Option<i32>,
+    pub race_id: Option<i32>,
+    pub base_price: Option<BigDecimal>,
+    pub published: Option<bool>,
 }
 
 #[derive(Queryable)]
