@@ -55,6 +55,17 @@ Once server starts, access GraphiQl at `http://127.0.0.1:8080/graphiql`
       name
       description
     }
+    skillQueue(token: "XXXXXXXXX") {
+      id
+      name
+      index
+      finishedLevel
+      startDate
+      finishDate
+      trainingStartSp
+      levelEndSp
+      levelStartSp    
+    }
   }
 }
 
