@@ -47,7 +47,6 @@ pub struct Character {
 #[derive(GraphQLObject)]
 pub struct SkillQueueItem {
     pub id: i32,
-    pub name: Option<String>,
     pub index: i32,
     pub finished_level: i32,
     pub start_date: DateTime<Utc>,

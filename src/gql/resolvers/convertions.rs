@@ -60,7 +60,6 @@ impl From<esi::models::SkillQueueResponse> for schema::SkillQueueItem {
     fn from(model: esi::models::SkillQueueResponse) -> Self {
         schema::SkillQueueItem {
             id: model.skill_id,
-            name: None, // will resolve later
             index: model.queue_position,
             finished_level: model.finished_level,
             start_date: model.start_date,
