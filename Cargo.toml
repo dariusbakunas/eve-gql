@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 actix-web = "1.0.0"
 base64 = "0.10.1"
+chrono = { version = "0.4.6", features = ["serde"] }
 dotenv = "0.14.1"
 juniper = "0.12.0"
 futures = "0.1.27"

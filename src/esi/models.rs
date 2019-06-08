@@ -1,4 +1,6 @@
 use serde::{Deserialize};
+use chrono::{DateTime, Utc};
+use chrono::prelude::*;
 
 #[derive(Deserialize, Debug)]
 pub struct CharacterResponse {
@@ -20,4 +22,6 @@ pub struct SkillQueueResponse {
     pub level_start_sp: i32,
     pub finished_level: i32,
     pub training_start_sp: i32,
+    pub start_date: DateTime<Utc>,
+    pub finish_date: DateTime<Utc>,
 }

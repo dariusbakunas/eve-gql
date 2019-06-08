@@ -2,6 +2,7 @@ use juniper::EmptyMutation;
 use juniper::RootNode;
 
 use crate::Context;
+use chrono::{DateTime, Utc};
 
 pub struct Query;
 
@@ -48,6 +49,12 @@ pub struct SkillQueueItem {
     pub id: i32,
     pub name: Option<String>,
     pub index: i32,
+    pub finished_level: i32,
+    pub start_date: DateTime<Utc>,
+    pub finish_date: DateTime<Utc>,
+    pub level_start_sp: i32,
+    pub level_end_sp: i32,
+    pub training_start_sp: i32,
 }
 
 pub type Schema = RootNode<'static, Query, EmptyMutation<Context>>;

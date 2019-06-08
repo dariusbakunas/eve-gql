@@ -68,7 +68,13 @@ impl From<esi::models::SkillQueueResponse> for SkillQueueItem {
         SkillQueueItem {
             id: model.skill_id,
             name: None, // will resolve later
-            index: 0
+            index: model.queue_position,
+            finished_level: model.finished_level,
+            start_date: model.start_date,
+            finish_date: model.finish_date,
+            level_start_sp: model.level_start_sp,
+            level_end_sp: model.level_end_sp,
+            training_start_sp: model.training_start_sp,
         }
     }
 }
@@ -204,7 +210,7 @@ impl InvMarketGroup {
     fn invMarketGroups(&self, context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
         use crate::dao::schema::invMarketGroups::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let results = dsl::invMarketGroups.order(dsl::marketGroupName)
             .filter(dsl::parentGroupID.eq(&self.id))
@@ -232,7 +238,7 @@ impl MapRegion {
     fn mapSolarSystems(&self, context: &Context) -> FieldResult<Vec<MapSolarSystem>> {
         use crate::dao::schema::mapSolarSystems::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let results = dsl::mapSolarSystems.order(dsl::solarSystemName)
             .filter(dsl::regionID.eq(&self.id))
