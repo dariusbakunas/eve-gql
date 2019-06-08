@@ -11,10 +11,10 @@ Started this project to learn Rust
 
 ### Environment
 
-* create .env file in project root and configure DATABASE_URL:
+* create .env file in project root and configure DATABASE_URL (base64 encoded):
 
 ```
-DATABASE_URL=mysql://user:password@127.0.0.1:3306/eve-gql
+DATABASE_URL=base64(mysql://user:password@127.0.0.1:3306/eve-gql)
 ```
 
 ### Start
