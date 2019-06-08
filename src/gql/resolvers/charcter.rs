@@ -1,10 +1,12 @@
+use diesel::prelude::*;
+use juniper::FieldResult;
+
 use crate::Context;
 use crate::dao::models;
 use crate::esi::api;
-use diesel::prelude::*;
-use super::super::schema::Character;
-use juniper::{FieldResult};
 use crate::gql::schema::SkillQueueItem;
+
+use super::super::schema::Character;
 
 #[juniper::object(
     Context = Context,
@@ -21,7 +23,7 @@ impl Character {
     fn ancestry(&self, context: &Context) -> FieldResult<models::ChrAncestry> {
         use crate::dao::schema::chrAncestries::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let result = dsl::chrAncestries
             .find(self.ancestry_id)
@@ -33,7 +35,7 @@ impl Character {
     fn bloodline(&self, context: &Context) -> FieldResult<models::ChrBloodline> {
         use crate::dao::schema::chrBloodlines::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let result = dsl::chrBloodlines
             .find(self.bloodline_id)
@@ -45,7 +47,7 @@ impl Character {
     fn race(&self, context: &Context) -> FieldResult<models::ChrRace> {
         use crate::dao::schema::chrRaces::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let result = dsl::chrRaces
             .find(self.race_id)

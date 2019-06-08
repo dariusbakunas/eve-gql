@@ -1,5 +1,6 @@
-use juniper::RootNode;
 use juniper::EmptyMutation;
+use juniper::RootNode;
+
 use crate::Context;
 
 pub struct Query;

@@ -1,20 +1,22 @@
-use crate::Context;
-use juniper::{FieldResult, FieldError, Value};
 use diesel::prelude::*;
+use juniper::{FieldError, FieldResult, Value};
 use reqwest;
+use reqwest::StatusCode;
+
+use crate::Context;
 use crate::dao::models;
 use crate::esi;
-use super::super::schema::Query;
-use super::super::schema::Character;
-use super::super::schema::InvType;
-use super::super::schema::InvGroup;
-use super::super::schema::InvMarketGroup;
-use super::super::schema::MapRegion;
-use super::super::schema::MapSolarSystem;
-use super::super::schema::SkillQueueItem;
-use reqwest::StatusCode;
 use crate::esi::api;
 use crate::esi::models::SkillQueueResponse;
+
+use super::super::schema::Character;
+use super::super::schema::InvGroup;
+use super::super::schema::InvMarketGroup;
+use super::super::schema::InvType;
+use super::super::schema::MapRegion;
+use super::super::schema::MapSolarSystem;
+use super::super::schema::Query;
+use super::super::schema::SkillQueueItem;
 
 impl From<models::InvType> for InvType {
     fn from(model: models::InvType) -> Self {
@@ -92,7 +94,7 @@ impl Query {
     fn invTypes(context: &Context) -> FieldResult<Vec<InvType>> {
         use crate::dao::schema::invTypes::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let results = dsl::invTypes.order(dsl::typeName)
             .load::<models::InvType>(&*connection)?
@@ -106,7 +108,7 @@ impl Query {
     fn invGroups(context: &Context) -> FieldResult<Vec<InvGroup>> {
         use crate::dao::schema::invGroups::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let results = dsl::invGroups.order(dsl::groupName)
             .load::<models::InvGroup>(&*connection)?
@@ -120,7 +122,7 @@ impl Query {
     fn mapRegions(context: &Context) -> FieldResult<Vec<MapRegion>> {
         use crate::dao::schema::mapRegions::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let results = dsl::mapRegions.order(dsl::regionName)
             .load::<models::MapRegion>(&*connection)?
@@ -134,7 +136,7 @@ impl Query {
     fn mapSolarSystems(context: &Context) -> FieldResult<Vec<MapSolarSystem>> {
         use crate::dao::schema::mapSolarSystems::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let results = dsl::mapSolarSystems.order(dsl::solarSystemName)
             .load::<models::MapSolarSystem>(&*connection)?
@@ -148,7 +150,7 @@ impl Query {
     fn invMarketGroups(context: &Context) -> FieldResult<Vec<InvMarketGroup>> {
         use crate::dao::schema::invMarketGroups::dsl;
 
-        let connection = executor.context().pool.clone().get().unwrap();
+        let connection = context.pool.get().unwrap();
 
         let results = dsl::invMarketGroups.order(dsl::marketGroupName)
             .filter(dsl::parentGroupID.is_null())

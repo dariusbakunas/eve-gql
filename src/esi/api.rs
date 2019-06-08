@@ -1,11 +1,11 @@
-use reqwest;
-use reqwest::StatusCode;
 use std::error::Error;
 
-use crate::esi::models;
-use crate::errors::ErrorKind;
-use crate::errors::*;
+use reqwest;
+use reqwest::StatusCode;
 
+use crate::errors::*;
+use crate::errors::ErrorKind;
+use crate::esi::models;
 
 pub fn get_character(id: i32) -> Result<Option<models::CharacterResponse>> {
     let url = format!("https://esi.evetech.net/latest/characters/{}/?datasource=tranquility", id);

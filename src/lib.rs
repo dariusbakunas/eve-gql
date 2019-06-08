@@ -1,34 +1,32 @@
 #![recursion_limit="128"]
 
 #[macro_use]
-extern crate juniper;
-
-#[macro_use]
 extern crate diesel;
-
 #[macro_use]
 extern crate error_chain;
-
+#[macro_use]
+extern crate juniper;
 #[macro_use]
 extern crate log;
 
 use std::io;
-use actix_web::{middleware, App, HttpServer, web};
+use std::sync::Arc;
+
+use actix_web::{App, HttpServer, middleware, web};
+use diesel::mysql::MysqlConnection;
+use juniper::Context as JuniperContext;
 use r2d2;
 use r2d2_diesel::ConnectionManager;
-use diesel::mysql::MysqlConnection;
-use juniper::{Context as JuniperContext};
-use std::sync::Arc;
+
+use gql::routes::graphiql;
+use gql::routes::graphql;
+use gql::schema::create_schema;
+use gql::schema::Schema;
 
 mod gql;
 mod dao;
 mod esi;
 mod errors;
-
-use gql::routes::graphiql;
-use gql::routes::graphql;
-use gql::schema::create_schema;
-use crate::gql::schema::Schema;
 
 pub struct Context {
     pub pool: r2d2::Pool<r2d2_diesel::ConnectionManager<MysqlConnection>>,
