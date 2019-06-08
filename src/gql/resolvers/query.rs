@@ -7,6 +7,28 @@ use crate::dao::models;
 use crate::esi::api;
 
 use super::super::schema;
+use r2d2::PooledConnection;
+use r2d2_diesel::ConnectionManager;
+use cached::UnboundCache;
+
+cached_key!{
+    LENGTH: UnboundCache<i32, Option<schema::Skill>> = UnboundCache::new();
+    Key = { id };
+    fn get_skill(connection: PooledConnection<ConnectionManager<MysqlConnection>>, id: i32) -> Option<schema::Skill> = {
+        use crate::dao::schema::invTypes::dsl;
+
+        let query = dsl::invTypes
+            .find(id);
+
+        let sql = debug_query::<diesel::mysql::Mysql, _>(&query);
+        info!("Get skill groups: {:?}", sql);
+
+        match query.first::<models::InvType>(&*connection) {
+            Ok(skill) => Some(schema::Skill::from(skill)),
+            Err(_) => None,
+        }
+    }
+}
 
 #[juniper::object(
 Context = Context,
@@ -24,6 +46,14 @@ impl schema::Query {
         });
 
         Ok(character)
+    }
+
+    fn skill(context: &Context, id: i32) -> FieldResult<Option<schema::Skill>> {
+        let connection = context.pool.get().unwrap();
+
+        let skill = get_skill(connection, id);
+
+        Ok(skill)
     }
 
     fn inv_types(context: &Context) -> FieldResult<Vec<schema::InvType>> {

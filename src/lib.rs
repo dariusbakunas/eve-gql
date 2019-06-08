@@ -8,6 +8,8 @@ extern crate error_chain;
 extern crate juniper;
 #[macro_use]
 extern crate log;
+#[macro_use]
+extern crate cached;
 
 use std::io;
 use std::sync::Arc;
