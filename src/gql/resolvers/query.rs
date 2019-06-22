@@ -1,62 +1,16 @@
+use chrono::{DateTime, Utc};
 use diesel::debug_query;
 use diesel::prelude::*;
-use juniper::{FieldResult};
+use juniper::FieldResult;
+use r2d2::PooledConnection;
+use r2d2_diesel::ConnectionManager;
 
 use crate::Context;
 use crate::dao::models;
 use crate::esi::api;
+use crate::gql::resolvers::cache::{get_group_skills, get_skill};
 
 use super::super::schema;
-use r2d2::PooledConnection;
-use r2d2_diesel::ConnectionManager;
-use cached::UnboundCache;
-
-cached_key!{
-    GET_SKILL: UnboundCache<i32, Option<schema::Skill>> = UnboundCache::new();
-    Key = { id };
-    fn get_skill(connection: PooledConnection<ConnectionManager<MysqlConnection>>, id: i32) -> Option<schema::Skill> = {
-        use crate::dao::schema::invTypes::dsl;
-
-        let query = dsl::invTypes
-            .find(id);
-
-        let sql = debug_query::<diesel::mysql::Mysql, _>(&query);
-        info!("Get skill groups: {:?}", sql);
-
-        match query.first::<models::InvType>(&*connection) {
-            Ok(skill) => Some(schema::Skill::from(skill)),
-            Err(_) => None,
-        }
-    }
-}
-
-cached_key_result!{
-    GET_GROUP_SKILLS: UnboundCache<i32, Vec<schema::Skill>> = UnboundCache::new();
-    Key = { id };
-    fn get_group_skills(connection: PooledConnection<ConnectionManager<MysqlConnection>>, id: i32) -> FieldResult<Vec<schema::Skill>> = {
-        use crate::dao::schema::invTypes::dsl;
-
-        let query = dsl::invTypes.order(dsl::typeName)
-            .filter(dsl::groupID.eq(id))
-            .filter(dsl::published.eq(true));
-
-        let sql = debug_query::<diesel::mysql::Mysql, _>(&query);
-        info!("Get skills for group: {:?}", sql);
-
-        let result = query.load::<models::InvType>(&*connection);
-
-        match result {
-            Ok(s) => {
-                let skills: Vec<schema::Skill> = s
-                    .into_iter()
-                    .map(|skill: models::InvType| schema::Skill::from(skill))
-                    .collect();
-                Ok(skills)
-            },
-            Err(e) => Err(e),
-        }
-    }
-}
 
 #[juniper::object(
 Context = Context,
@@ -250,6 +204,28 @@ impl schema::SkillGroup {
         let skills = get_group_skills(connection, self.id.clone());
 
         skills
+    }
+}
+
+#[juniper::object(
+Context = Context,
+)]
+impl schema::SkillQueueItem {
+    fn id(&self) -> i32 { self.id }
+    fn index(&self) -> i32 { self.index }
+    fn finished_level(&self) -> i32 { self.finished_level }
+    fn start_date(&self) -> DateTime<Utc> { self.start_date }
+    fn finish_date(&self) -> DateTime<Utc> { self.finish_date }
+    fn level_start_sp(&self) -> i32 { self.level_start_sp }
+    fn level_end_sp(&self) -> i32 { self.level_end_sp }
+    fn training_start_sp(&self) -> i32 { self.training_start_sp }
+
+    fn name(&self, context: &Context) -> Option<String> {
+        let connection = context.pool.get().unwrap();
+        let result = get_skill(connection, self.id);
+
+        let name = result.map_or(None, |skill| skill.name);
+        return name
     }
 }
 

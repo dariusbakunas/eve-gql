@@ -44,7 +44,6 @@ pub struct Character {
     pub race_id: i32,
 }
 
-#[derive(GraphQLObject)]
 pub struct SkillQueueItem {
     pub id: i32,
     pub index: i32,
