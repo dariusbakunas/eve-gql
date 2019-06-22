@@ -4,13 +4,14 @@ use chrono::{DateTime, Utc};
 #[derive(Deserialize, Debug)]
 pub struct CharacterResponse {
     pub alliance_id: i32,
+    pub birthday: DateTime<Utc>,
     pub ancestry_id: i32,
     pub bloodline_id: i32,
     pub corporation_id: u32,
     pub gender: String,
     pub race_id: i32,
     pub name: String,
-    pub security_status: f32,
+    pub security_status: f64,
 }
 
 #[derive(Deserialize, Debug)]

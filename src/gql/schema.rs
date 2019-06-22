@@ -1,8 +1,8 @@
+use chrono::{DateTime, Utc};
 use juniper::EmptyMutation;
 use juniper::RootNode;
 
 use crate::Context;
-use chrono::{DateTime, Utc};
 
 pub struct Query;
 
@@ -39,9 +39,12 @@ pub struct MapSolarSystem {
 pub struct Character {
     pub id: i32,
     pub name: String,
+    pub gender: String,
+    pub birthday: DateTime<Utc>,
     pub ancestry_id: i32,
     pub bloodline_id: i32,
     pub race_id: i32,
+    pub security_status: f64,
 }
 
 pub struct SkillQueueItem {

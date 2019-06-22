@@ -1,5 +1,6 @@
 use diesel::prelude::*;
 use juniper::FieldResult;
+use chrono::{DateTime, Utc};
 
 use crate::Context;
 use crate::dao::models;
@@ -12,13 +13,11 @@ use super::super::schema::Character;
     Context = Context,
 )]
 impl Character {
-    fn id(&self) -> i32 {
-        self.id
-    }
-
-    fn name(&self) -> &String {
-        &self.name
-    }
+    fn id(&self) -> i32 { self.id }
+    fn name(&self) -> &String { &self.name }
+    fn birthday(&self) -> DateTime<Utc> { self.birthday }
+    fn gender(&self) -> &String { &self.gender }
+    fn security_status(&self) -> f64 { self.security_status }
 
     fn ancestry(&self, context: &Context) -> FieldResult<models::ChrAncestry> {
         use crate::dao::schema::chrAncestries::dsl;

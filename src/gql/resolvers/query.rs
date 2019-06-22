@@ -2,8 +2,6 @@ use chrono::{DateTime, Utc};
 use diesel::debug_query;
 use diesel::prelude::*;
 use juniper::FieldResult;
-use r2d2::PooledConnection;
-use r2d2_diesel::ConnectionManager;
 
 use crate::Context;
 use crate::dao::models;
@@ -20,10 +18,13 @@ impl schema::Query {
         let character = api::get_character(id)?.and_then(|character| {
             Some(schema::Character {
                 id,
+                birthday: character.birthday,
+                gender: character.gender,
                 name: character.name,
                 ancestry_id: character.ancestry_id,
                 bloodline_id: character.bloodline_id,
                 race_id: character.race_id,
+                security_status: character.security_status,
             })
         });
 
@@ -198,11 +199,8 @@ impl schema::SkillGroup {
     }
 
     fn skills(&self, context: &Context) -> FieldResult<Vec<schema::Skill>> {
-        use crate::dao::schema::invTypes::dsl;
-
         let connection = context.pool.get().unwrap();
         let skills = get_group_skills(connection, self.id.clone());
-
         skills
     }
 }
