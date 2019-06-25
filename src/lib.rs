@@ -14,7 +14,8 @@ extern crate cached;
 use std::io;
 use std::sync::Arc;
 
-use actix_web::{App, HttpServer, middleware, web};
+use actix_web::{http, App, HttpServer, middleware, web};
+use actix_cors::Cors;
 use diesel::mysql::MysqlConnection;
 use juniper::Context as JuniperContext;
 use r2d2;
@@ -54,6 +55,12 @@ pub fn run(database_url: &str) -> io::Result<()> {
     // Start http server
     HttpServer::new(move || {
         App::new()
+            .wrap(Cors::new() // <- Construct CORS middleware builder
+                //.allowed_origin("http://localhost:3000")
+                .allowed_methods(vec!["GET", "POST"])
+                .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+                .allowed_header(http::header::CONTENT_TYPE)
+                .max_age(3600))
             .data(AppState {
                 schema: schema.clone(),
                 context: Context {
@@ -64,6 +71,6 @@ pub fn run(database_url: &str) -> io::Result<()> {
             .service(web::resource("/graphql").route(web::post().to_async(graphql)))
             .service(web::resource("/graphiql").route(web::get().to(graphiql)))
     })
-        .bind("127.0.0.1:8080")?
+        .bind("0.0.0.0:8080")?
         .run()
 }
