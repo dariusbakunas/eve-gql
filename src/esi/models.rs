@@ -25,3 +25,21 @@ pub struct SkillQueueResponse {
     pub start_date: DateTime<Utc>,
     pub finish_date: DateTime<Utc>,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct CorporationResponse {
+    pub alliance_id: i32,
+    pub ceo_id: i32,
+    pub creator_id: i32,
+    pub date_founded: DateTime<Utc>,
+    pub description: String,
+    pub faction_id: Option<i32>,
+    pub home_station_id: i32,
+    pub member_count: i32,
+    pub name: String,
+    pub shares: i32,
+    pub tax_rate: f64,
+    pub ticker: String,
+    pub url: String,
+    pub war_eligible: bool,
+}

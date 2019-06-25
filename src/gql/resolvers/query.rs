@@ -31,6 +31,23 @@ impl schema::Query {
         Ok(character)
     }
 
+    fn corporation(context: &Context, id: i32) -> FieldResult<Option<schema::Corporation>> {
+        let corporation = api::get_corporation(id)?.and_then(|corporation| {
+            Some(schema::Corporation {
+                id,
+                name: corporation.name,
+                description: corporation.description,
+                tax_rate: corporation.tax_rate,
+                member_count: corporation.member_count,
+                date_founded: corporation.date_founded,
+                ticker: corporation.ticker,
+                url: corporation.url,
+            })
+        });
+
+        Ok(corporation)
+    }
+
     fn skill(context: &Context, id: i32) -> FieldResult<Option<schema::Skill>> {
         let connection = context.pool.get().unwrap();
 

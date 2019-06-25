@@ -25,6 +25,26 @@ pub fn get_character(id: i32) -> Result<Option<models::CharacterResponse>> {
     }
 }
 
+pub fn get_corporation(id: i32) -> Result<Option<models::CorporationResponse>> {
+    let url = format!("https://esi.evetech.net/latest/corporations/{}/?datasource=tranquility", id);
+    info!("GET {}", url);
+    let mut resp = reqwest::get(&url)
+        .chain_err(|| "failed getting corporation info")?;
+
+    if resp.status().is_success() {
+        let corporation: models::CorporationResponse = resp.json()
+            .chain_err(|| "failed deserializing corporation info")?;
+
+        Ok(Some(corporation))
+    } else if resp.status().eq(&StatusCode::NOT_FOUND) {
+        Ok(None)
+    } else {
+        println!("Corporation request failed. Status: {:?}", resp.status());
+        resp.error_for_status_ref()?;
+        Err(ErrorKind::Msg(String::from("Corporation request failed")).into())
+    }
+}
+
 pub fn get_skill_queue(id: i32, token: &str) -> Result<Option<Vec<models::SkillQueueResponse>>> {
     let url = format!("https://esi.evetech.net/latest/characters/{}/skillqueue/?datasource=tranquility", id);
     info!("GET {}", url);

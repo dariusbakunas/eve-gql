@@ -47,6 +47,18 @@ pub struct Character {
     pub security_status: f64,
 }
 
+#[derive(GraphQLObject)]
+pub struct Corporation {
+    pub id: i32,
+    pub name: String,
+    pub ticker: String,
+    pub url: String,
+    pub description: String,
+    pub date_founded: DateTime<Utc>,
+    pub member_count: i32,
+    pub tax_rate: f64,
+}
+
 pub struct SkillQueueItem {
     pub id: i32,
     pub index: i32,
