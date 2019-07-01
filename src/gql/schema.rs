@@ -38,6 +38,7 @@ pub struct MapSolarSystem {
 
 pub struct Character {
     pub id: i32,
+    pub corporation_id: i32,
     pub name: String,
     pub gender: String,
     pub birthday: DateTime<Utc>,
@@ -47,7 +48,7 @@ pub struct Character {
     pub security_status: f64,
 }
 
-#[derive(GraphQLObject)]
+#[derive(GraphQLObject, Clone)]
 pub struct Corporation {
     pub id: i32,
     pub name: String,

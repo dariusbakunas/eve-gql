@@ -7,7 +7,7 @@ pub struct CharacterResponse {
     pub birthday: DateTime<Utc>,
     pub ancestry_id: i32,
     pub bloodline_id: i32,
-    pub corporation_id: u32,
+    pub corporation_id: i32,
     pub gender: String,
     pub race_id: i32,
     pub name: String,
@@ -28,7 +28,7 @@ pub struct SkillQueueResponse {
 
 #[derive(Deserialize, Debug)]
 pub struct CorporationResponse {
-    pub alliance_id: i32,
+    pub alliance_id: Option<i32>,
     pub ceo_id: i32,
     pub creator_id: i32,
     pub date_founded: DateTime<Utc>,
@@ -41,5 +41,5 @@ pub struct CorporationResponse {
     pub tax_rate: f64,
     pub ticker: String,
     pub url: String,
-    pub war_eligible: bool,
+    pub war_eligible: Option<bool>,
 }

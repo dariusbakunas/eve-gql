@@ -5,9 +5,9 @@ use chrono::{DateTime, Utc};
 use crate::Context;
 use crate::dao::models;
 use crate::esi::api;
-use crate::gql::schema::SkillQueueItem;
 
-use super::super::schema::Character;
+use super::super::schema::{Character, Corporation, SkillQueueItem};
+use crate::gql::resolvers::cache::{get_corporation};
 
 #[juniper::object(
     Context = Context,
@@ -41,6 +41,11 @@ impl Character {
             .get_result::<models::ChrBloodline>(&*connection)?;
 
         Ok(result)
+    }
+
+    fn corporation(&self, context: &Context) -> FieldResult<Option<Corporation>> {
+        let corporation = get_corporation(self.corporation_id);
+        return corporation;
     }
 
     fn race(&self, context: &Context) -> FieldResult<models::ChrRace> {

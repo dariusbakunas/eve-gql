@@ -6,7 +6,7 @@ use juniper::FieldResult;
 use crate::Context;
 use crate::dao::models;
 use crate::esi::api;
-use crate::gql::resolvers::cache::{get_group_skills, get_skill};
+use crate::gql::resolvers::cache::{get_group_skills, get_skill, get_corporation};
 
 use super::super::schema;
 
@@ -19,6 +19,7 @@ impl schema::Query {
             Some(schema::Character {
                 id,
                 birthday: character.birthday,
+                corporation_id: character.corporation_id,
                 gender: character.gender,
                 name: character.name,
                 ancestry_id: character.ancestry_id,
@@ -31,21 +32,9 @@ impl schema::Query {
         Ok(character)
     }
 
-    fn corporation(context: &Context, id: i32) -> FieldResult<Option<schema::Corporation>> {
-        let corporation = api::get_corporation(id)?.and_then(|corporation| {
-            Some(schema::Corporation {
-                id,
-                name: corporation.name,
-                description: corporation.description,
-                tax_rate: corporation.tax_rate,
-                member_count: corporation.member_count,
-                date_founded: corporation.date_founded,
-                ticker: corporation.ticker,
-                url: corporation.url,
-            })
-        });
-
-        Ok(corporation)
+    pub fn corporation(context: &Context, id: i32) -> FieldResult<Option<schema::Corporation>> {
+        let corporation = get_corporation(id);
+        return corporation;
     }
 
     fn skill(context: &Context, id: i32) -> FieldResult<Option<schema::Skill>> {
