@@ -33,13 +33,14 @@ mod errors;
 
 pub struct Context {
     pub pool: r2d2::Pool<r2d2_diesel::ConnectionManager<MysqlConnection>>,
+    pub esi_token: Option<String>,
 }
 
 impl JuniperContext for Context {}
 
 pub struct AppState {
     schema: Arc<Schema>,
-    context: Context
+    context: Context,
 }
 
 pub fn run(database_url: &str) -> io::Result<()> {
@@ -65,6 +66,7 @@ pub fn run(database_url: &str) -> io::Result<()> {
                 schema: schema.clone(),
                 context: Context {
                     pool: pool.clone(),
+                    esi_token: None
                 },
             })
             .wrap(middleware::Logger::default())

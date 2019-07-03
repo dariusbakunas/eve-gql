@@ -1,5 +1,5 @@
 use diesel::prelude::*;
-use juniper::FieldResult;
+use juniper::{FieldResult, FieldError};
 use chrono::{DateTime, Utc};
 
 use crate::Context;
@@ -8,6 +8,7 @@ use crate::esi::api;
 
 use super::super::schema::{Character, Corporation, SkillQueueItem};
 use crate::gql::resolvers::cache::{get_corporation};
+use crate::errors::ErrorKind;
 
 #[juniper::object(
     Context = Context,
@@ -60,14 +61,26 @@ impl Character {
         Ok(result)
     }
 
-    fn skill_queue(&self, token: String, context: &Context) -> FieldResult<Option<Vec<SkillQueueItem>>> {
-        let skill_queue: Option<Vec<SkillQueueItem>> = api::get_skill_queue(self.id, &token[..])?
-            .and_then(|queue| {
-                Some(queue.into_iter()
-                    .map(|item| SkillQueueItem::from(item))
-                    .collect())
-            });
+    fn skill_queue(&self, context: &Context) -> FieldResult<Option<Vec<SkillQueueItem>>> {
+        let token = &context.esi_token;
 
-        Ok(skill_queue)
+        match token {
+            None => {
+                Err(FieldError::new(
+                    "skillQueue requires ESI token",
+                    graphql_value!({ "user_error": "ESI token missing" })
+                ))
+            },
+            Some(esi) => {
+                let skill_queue: Option<Vec<SkillQueueItem>> = api::get_skill_queue(self.id, &esi[..])?
+                    .and_then(|queue| {
+                        Some(queue.into_iter()
+                            .map(|item| SkillQueueItem::from(item))
+                            .collect())
+                    });
+
+                Ok(skill_queue)
+            },
+        }
     }
 }

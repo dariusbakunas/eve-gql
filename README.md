@@ -55,7 +55,7 @@ Once server starts, access GraphiQl at `http://127.0.0.1:8080/graphiql`
       name
       description
     }
-    skillQueue(token: "XXXXXXXXX") {
+    skillQueue {
       id            
       index
       name
@@ -86,3 +86,5 @@ Once server starts, access GraphiQl at `http://127.0.0.1:8080/graphiql`
   }
 }
 ```
+
+*Note: certain items, like skillQueue requires esi token, specify it using `X-ESI-TOKEN` header value*
