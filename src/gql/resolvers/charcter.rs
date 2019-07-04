@@ -61,6 +61,27 @@ impl Character {
         Ok(result)
     }
 
+    fn skill_points(&self, context: &Context) -> FieldResult<Option<i32>> {
+        let token = &context.esi_token;
+
+        match token {
+            None => {
+                Err(FieldError::new(
+                    "skillPoints require ESI token",
+                    graphql_value!({ "user_error": "ESI token missing" })
+                ))
+            },
+            Some(esi) => {
+                let sp: Option<i32> = api::get_skills(self.id, &esi[..])?
+                    .and_then(|skills| {
+                        Some(skills.total_sp)
+                    });
+
+                Ok(sp)
+            },
+        }
+    }
+
     fn skill_queue(&self, context: &Context) -> FieldResult<Option<Vec<SkillQueueItem>>> {
         let token = &context.esi_token;
 
