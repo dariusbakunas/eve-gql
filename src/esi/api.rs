@@ -67,3 +67,26 @@ pub fn get_skill_queue(id: i32, token: &str) -> Result<Option<Vec<models::SkillQ
         Err(ErrorKind::Msg(String::from("Skill queue request failed")).into())
     }
 }
+
+pub fn get_skills(id: i32, token: &str) -> Result<Option<models::SkillsResponse>> {
+    let url = format!("https://esi.evetech.net/latest/characters/{}/skills/?datasource=tranquility", id);
+    info!("GET {}", url);
+    let client = reqwest::Client::new();
+
+    let mut resp = client.get(&url)
+        .bearer_auth(token)
+        .send()?;
+
+    if resp.status().is_success() {
+        let queue: models::SkillsResponse = resp.json()
+            .chain_err(|| "failed deserializing skills")?;
+
+        Ok(Some(queue))
+    } else if resp.status().eq(&StatusCode::NOT_FOUND) {
+        Ok(None)
+    } else {
+        println!("Skills request failed. Status: {:?}", resp.status());
+        resp.error_for_status_ref()?;
+        Err(ErrorKind::Msg(String::from("Skills request failed")).into())
+    }
+}

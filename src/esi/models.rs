@@ -27,6 +27,20 @@ pub struct SkillQueueResponse {
 }
 
 #[derive(Deserialize, Debug)]
+pub struct Skill {
+    active_skill_level: i32,
+    skill_id: i32,
+    skillpoints_in_skill: i32,
+    trained_skill_level: i32,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct SkillsResponse {
+    pub total_sp: i32,
+    pub skills: Vec<Skill>,
+}
+
+#[derive(Deserialize, Debug)]
 pub struct CorporationResponse {
     pub alliance_id: Option<i32>,
     pub ceo_id: i32,
