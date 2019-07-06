@@ -53,9 +53,9 @@ pub struct Corporation {
     pub id: i32,
     pub name: String,
     pub ticker: String,
-    pub url: String,
+    pub url: Option<String>,
     pub description: String,
-    pub date_founded: DateTime<Utc>,
+    pub date_founded: Option<DateTime<Utc>>,
     pub member_count: i32,
     pub tax_rate: f64,
 }
@@ -76,6 +76,13 @@ pub struct Skill {
     pub id: i32,
     pub name: Option<String>,
     pub description: Option<String>,
+}
+
+pub struct CharacterSkill {
+    pub id: i32,
+    pub trained_skill_level: i32,
+    pub active_skill_level: i32,
+    pub skillpoints_in_skill: i32,
 }
 
 pub struct SkillGroup {

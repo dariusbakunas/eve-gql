@@ -12,9 +12,7 @@ pub fn get_character(id: i32) -> Result<Option<models::CharacterResponse>> {
         .chain_err(|| "failed getting character info")?;
 
     if resp.status().is_success() {
-        let character: models::CharacterResponse = resp.json()
-            .chain_err(|| "failed deserializing character info")?;
-
+        let character: models::CharacterResponse = resp.json()?;
         Ok(Some(character))
     } else if resp.status().eq(&StatusCode::NOT_FOUND) {
         Ok(None)

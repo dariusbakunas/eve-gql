@@ -3,7 +3,7 @@ use chrono::{DateTime, Utc};
 
 #[derive(Deserialize, Debug)]
 pub struct CharacterResponse {
-    pub alliance_id: i32,
+    pub alliance_id: Option<i32>,
     pub birthday: DateTime<Utc>,
     pub ancestry_id: i32,
     pub bloodline_id: i32,
@@ -45,7 +45,7 @@ pub struct CorporationResponse {
     pub alliance_id: Option<i32>,
     pub ceo_id: i32,
     pub creator_id: i32,
-    pub date_founded: DateTime<Utc>,
+    pub date_founded: Option<DateTime<Utc>>,
     pub description: String,
     pub faction_id: Option<i32>,
     pub home_station_id: i32,
@@ -54,6 +54,6 @@ pub struct CorporationResponse {
     pub shares: i32,
     pub tax_rate: f64,
     pub ticker: String,
-    pub url: String,
+    pub url: Option<String>,
     pub war_eligible: Option<bool>,
 }
