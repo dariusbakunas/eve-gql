@@ -59,7 +59,7 @@ impl From<models::InvGroup> for schema::SkillGroup {
 impl From<esi::models::SkillQueueResponse> for schema::SkillQueueItem {
     fn from(model: esi::models::SkillQueueResponse) -> Self {
         schema::SkillQueueItem {
-            id: model.skill_id,
+            skill_id: model.skill_id,
             index: model.queue_position,
             finished_level: model.finished_level,
             start_date: model.start_date,

@@ -1,5 +1,5 @@
 use diesel::prelude::*;
-use cached::UnboundCache;
+use cached::{UnboundCache, TimedCache};
 use super::super::schema;
 use crate::dao::models;
 use crate::esi::api;

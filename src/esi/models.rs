@@ -28,10 +28,10 @@ pub struct SkillQueueResponse {
 
 #[derive(Deserialize, Debug)]
 pub struct Skill {
-    active_skill_level: i32,
-    skill_id: i32,
-    skillpoints_in_skill: i32,
-    trained_skill_level: i32,
+    pub active_skill_level: i32,
+    pub skill_id: i32,
+    pub skillpoints_in_skill: i32,
+    pub trained_skill_level: i32,
 }
 
 #[derive(Deserialize, Debug)]

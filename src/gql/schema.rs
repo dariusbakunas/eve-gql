@@ -61,7 +61,7 @@ pub struct Corporation {
 }
 
 pub struct SkillQueueItem {
-    pub id: i32,
+    pub skill_id: i32,
     pub index: i32,
     pub finished_level: i32,
     pub start_date: DateTime<Utc>,
@@ -78,6 +78,7 @@ pub struct Skill {
     pub description: Option<String>,
 }
 
+#[derive(GraphQLObject, Clone)]
 pub struct CharacterSkill {
     pub id: i32,
     pub trained_skill_level: i32,

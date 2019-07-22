@@ -215,7 +215,7 @@ impl schema::SkillGroup {
 Context = Context,
 )]
 impl schema::SkillQueueItem {
-    fn id(&self) -> i32 { self.id }
+    fn skill_id(&self) -> i32 { self.skill_id }
     fn index(&self) -> i32 { self.index }
     fn finished_level(&self) -> i32 { self.finished_level }
     fn start_date(&self) -> DateTime<Utc> { self.start_date }
@@ -226,7 +226,7 @@ impl schema::SkillQueueItem {
 
     fn name(&self, context: &Context) -> Option<String> {
         let connection = context.pool.get().unwrap();
-        let result = get_skill(connection, self.id);
+        let result = get_skill(connection, self.skill_id);
 
         let name = result.map_or(None, |skill| skill.name);
         return name

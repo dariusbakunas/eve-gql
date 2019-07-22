@@ -6,7 +6,7 @@ use crate::Context;
 use crate::dao::models;
 use crate::esi::api;
 
-use super::super::schema::{Character, Corporation, SkillQueueItem};
+use super::super::schema::{Character, Corporation, CharacterSkill, SkillQueueItem};
 use crate::gql::resolvers::cache::{get_corporation};
 use crate::errors::ErrorKind;
 
@@ -75,6 +75,37 @@ impl Character {
                 let sp: Option<i32> = api::get_skills(self.id, &esi[..])?
                     .and_then(|skills| {
                         Some(skills.total_sp)
+                    });
+
+                Ok(sp)
+            },
+        }
+    }
+
+    fn skills(&self, context: &Context) -> FieldResult<Option<Vec<CharacterSkill>>> {
+        let token = &context.esi_token;
+
+        match token {
+            None => {
+                Err(FieldError::new(
+                    "skills require ESI token",
+                    graphql_value!({ "user_error": "ESI token missing" })
+                ))
+            },
+            Some(esi) => {
+                let sp: Option<Vec<CharacterSkill>> = api::get_skills(self.id, &esi[..])?
+                    .and_then(|response| {
+                        let resp: Vec<CharacterSkill> = response.skills.iter()
+                            .map(|skill| {
+                                CharacterSkill {
+                                    id: skill.skill_id,
+                                    trained_skill_level: skill.trained_skill_level,
+                                    active_skill_level: skill.active_skill_level,
+                                    skillpoints_in_skill: skill.skillpoints_in_skill,
+                                }
+                            })
+                            .collect();
+                        Some(resp)
                     });
 
                 Ok(sp)
